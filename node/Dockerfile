@@ -14,11 +14,9 @@ RUN geth init genesis.json
 
 ARG password
 ARG privatekey
-RUN echo $password > ./node1/.accountpassword
-RUN echo $privatekey > ./node1/.privatekey
-RUN geth account import --datadir node1/ --password ./node1/.accountpassword  ./node1/.privatekey
-RUN cat ./node1/.accountpassword
-RUN cat ./node1/.privatekey
+RUN echo $password > ./node1/.accountpassword \
+    && echo $privatekey > ./node1/.privatekey \
+    && geth account import --datadir node1/ --password ./node1/.accountpassword  ./node1/.privatekey
 
 ARG address
 ARG bootnodeId
