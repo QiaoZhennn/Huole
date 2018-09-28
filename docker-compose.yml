@@ -7,4 +7,34 @@ services:
     build:
       context: ./bootnode
     ports:
-      - 30318:30318/udp
+      - 30310:30310/udp
+    networks:
+      chainnet:
+        ipv4_address: 172.18.14.10 # The miners need to know the IP address later on
+
+  geth-node-1:
+    hostname: geth-node-1
+    depends_on:
+      - geth-bootnode
+    environment:
+      - address=0x158105f19def1777582cdaebb593326e2156f0b8 #derived from the private key which is passed in the args
+      - bootnodeId=84ba012c18d64c6b128e0d4052f2e444ca9cf7068f4938adc4fdaadb367449fade42a7546247faa45069bdef7428d4c46e2ee7d71840e15e7d478aeaa21395c4
+      - bootnodeIp=172.18.14.10
+    build:
+      context: ./node
+      args:
+        privatekey: 9f8eb96f1dabed2008831dd6c04a0814b3daaf36a823ffe366ddd8c42c04d0dc #don't do this in production
+        password: todamoon1
+    container_name: geth-miner-1
+    ports:
+      - 8501:8501
+    healthcheck:
+      test: wget http://localhost:8501
+      interval: 2s
+      timeout: 5s
+      retries: 30
+    volumes:
+      - node1:/home/ubuntu/sunnynet_node_test/
+    networks:
+      chainnet:
+        ipv4_address: 172.18.14.10 # The monitor needs to know this address
