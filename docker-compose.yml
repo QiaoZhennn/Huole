@@ -22,13 +22,11 @@ services:
     build:
       context: ./node
       args:
-        privatekey: 9f8eb96f1dabed2008831dd6c04a0814b3daaf36a823ffe366ddd8c42c04d0dc #don't do this in production
+        privatekey: 9f8eb96f1dabed2008831dd6c04a0814b3daaf36a823ffe366ddd8c42c04d0dc
         password: todamoon1
     container_name: geth-miner-1
     ports:
       - 8501:8501
-    volumes:
-      - node1:/home/ubuntu/sunnynet_node_test/
 
 volumes:
   node1:
