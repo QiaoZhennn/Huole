@@ -1,0 +1,18 @@
+{
+  "join": "join",
+  "leave": "leave",
+  "newTx": "NEW_TX",
+  "newBlock": "NEW_BLOCK",
+  "pastTxs": "pastTxs",
+  "pastTxsR": "PAST_TXS_RECEIVED",
+  "pastBlocks": "pastBlocks",
+  "getBalance": "getBalance",
+  "getTokenBalance": "getTokenBalance",
+  "getTotalTxs": "getTotalTxs",
+  "getTicker": "getTicker",
+  "getTxs": "getTxs",
+  "getTx": "getTx",
+  "getBlock": "getBlock",
+  "getBlockTransactions": "getBlockTransactions",
+  "pastBlocksR": "PAST_BLOCKS_RECEIVED"
+}
