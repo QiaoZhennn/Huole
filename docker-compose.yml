@@ -1,36 +1,31 @@
 version: "2"
 services:
-  geth-bootnode:
-    hostname: geth-bootnode
+  bootnode:
+    image: ethereum/client-go:alltools-stable
+    #entrypoint: /bin/sh
     environment:
       - nodekeyhex=3be27887153ab7e7678219842e405671869c5ff46a9639596148b8f44c4c234a
-    build:
-      context: ./bootnode
-    ports:
-      - 30310:30310/udp
-    networks:
-      - chainnet
+    command: sh -c "/usr/local/bin/bootnode -nodekeyhex $$nodekeyhex -addr 0.0.0.0:30310"
+    network_mode: "host"
 
-  geth-node-1:
-    hostname: geth-node-1
+  miner-1:
     depends_on:
-      - geth-bootnode
+      - bootnode
+    image: ethereum/client-go:alltools-stable
+    command: geth --syncmode 'full' --port 30311 --rpc --rpcaddr '0.0.0.0' --rpcport 8501 --rpccorsdomain '*' --rpcapi 'personal,db,eth,net,web3,txpool,miner' --bootnodes "enode://84ba012c18d64c6b128e0d4052f2e444ca9cf7068f4938adc4fdaadb367449fade42a7546247faa45069bdef7428d4c46e2ee7d71840e15e7d478aeaa21395c4@172.18.14.10:30310" --networkid 888 --gasprice '1' --etherbase 0x158105f19def1777582cdaebb593326e2156f0b8 --unlock 0x158105f19def1777582cdaebb593326e2156f0b8 --password /root/.ethereum/.pass --mine
+    volumes:
+      - "./data/node1:/root/.ethereum"
+    network_mode: "host"
+
+  miner-2:
+    depends_on:
+      - bootnode
+    image: ethereum/client-go:alltools-stable
+    command: geth --syncmode 'full' --port 30312 --rpc --rpcaddr '0.0.0.0' --rpcport 8502 --rpccorsdomain '*' --rpcapi 'personal,db,eth,net,web3,txpool,miner' --bootnodes "enode://84ba012c18d64c6b128e0d4052f2e444ca9cf7068f4938adc4fdaadb367449fade42a7546247faa45069bdef7428d4c46e2ee7d71840e15e7d478aeaa21395c4@172.18.14.10:30310" --networkid 888 --gasprice '1' --etherbase 0x4283501b67050cc725583f7a9821bb7f345cf6d3 --unlock 0x4283501b67050cc725583f7a9821bb7f345cf6d3 --password /root/.ethereum/.pass --mine
     environment:
-      - address=0x158105f19def1777582cdaebb593326e2156f0b8 #derived from the private key which is passed in the args
+      - address=0x4283501b67050cc725583f7a9821bb7f345cf6d3 #derived from the private key which is passed in the args
       - bootnodeId=84ba012c18d64c6b128e0d4052f2e444ca9cf7068f4938adc4fdaadb367449fade42a7546247faa45069bdef7428d4c46e2ee7d71840e15e7d478aeaa21395c4
       - bootnodeIp=172.18.14.10
-    build:
-      context: ./node
-      args:
-        privatekey: 9f8eb96f1dabed2008831dd6c04a0814b3daaf36a823ffe366ddd8c42c04d0dc
-        password: todamoon1
-    container_name: geth-miner-1
-    ports:
-      - 8501:8501
-
-volumes:
-  node1:
-
-networks:
-  chainnet:
-    driver: bridge
+    volumes:
+      - "./data/node2:/root/.ethereum"
+    network_mode: "host"
