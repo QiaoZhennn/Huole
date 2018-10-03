@@ -10,6 +10,10 @@ cd $NODE
 
 geth --datadir . init ../genesis.json
 
+if [[ -z "$PASS" ]]; then
+  exit 0
+fi
+
 echo $PASS > ./.pass
 echo $KEY> ./.key
 

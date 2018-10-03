@@ -12,7 +12,7 @@ services:
     depends_on:
       - bootnode
     image: ethereum/client-go:alltools-stable
-    command: geth --syncmode 'full' --port 30311 --rpc --rpcaddr '0.0.0.0' --rpcport 8501 --rpccorsdomain '*' --rpcapi 'personal,db,eth,net,web3,txpool,miner' --bootnodes "enode://84ba012c18d64c6b128e0d4052f2e444ca9cf7068f4938adc4fdaadb367449fade42a7546247faa45069bdef7428d4c46e2ee7d71840e15e7d478aeaa21395c4@172.18.14.10:30310" --networkid 888 --gasprice '1' --etherbase 0x158105f19def1777582cdaebb593326e2156f0b8 --unlock 0x158105f19def1777582cdaebb593326e2156f0b8 --password /root/.ethereum/.pass --mine
+    command: geth --syncmode 'full' --port 30311 --rpc --rpcaddr '0.0.0.0' --rpcport 8502 --rpccorsdomain '*' --rpcapi 'personal,db,eth,net,web3,txpool,miner' --bootnodes "enode://84ba012c18d64c6b128e0d4052f2e444ca9cf7068f4938adc4fdaadb367449fade42a7546247faa45069bdef7428d4c46e2ee7d71840e15e7d478aeaa21395c4@172.18.14.10:30310" --networkid 888 --gasprice '1' --etherbase 0x158105f19def1777582cdaebb593326e2156f0b8 --unlock 0x158105f19def1777582cdaebb593326e2156f0b8 --password /root/.ethereum/.pass --mine
     volumes:
       - "./data/node1:/root/.ethereum"
     network_mode: "host"
@@ -21,11 +21,20 @@ services:
     depends_on:
       - bootnode
     image: ethereum/client-go:alltools-stable
-    command: geth --syncmode 'full' --port 30312 --rpc --rpcaddr '0.0.0.0' --rpcport 8502 --rpccorsdomain '*' --rpcapi 'personal,db,eth,net,web3,txpool,miner' --bootnodes "enode://84ba012c18d64c6b128e0d4052f2e444ca9cf7068f4938adc4fdaadb367449fade42a7546247faa45069bdef7428d4c46e2ee7d71840e15e7d478aeaa21395c4@172.18.14.10:30310" --networkid 888 --gasprice '1' --etherbase 0x4283501b67050cc725583f7a9821bb7f345cf6d3 --unlock 0x4283501b67050cc725583f7a9821bb7f345cf6d3 --password /root/.ethereum/.pass --mine
+    command: geth --syncmode 'full' --port 30312 --rpc --rpcaddr '0.0.0.0' --rpcport 8503 --rpccorsdomain '*' --rpcapi 'personal,db,eth,net,web3,txpool,miner' --bootnodes "enode://84ba012c18d64c6b128e0d4052f2e444ca9cf7068f4938adc4fdaadb367449fade42a7546247faa45069bdef7428d4c46e2ee7d71840e15e7d478aeaa21395c4@172.18.14.10:30310" --networkid 888 --gasprice '1' --etherbase 0x4283501b67050cc725583f7a9821bb7f345cf6d3 --unlock 0x4283501b67050cc725583f7a9821bb7f345cf6d3 --password /root/.ethereum/.pass --mine
     environment:
       - address=0x4283501b67050cc725583f7a9821bb7f345cf6d3 #derived from the private key which is passed in the args
       - bootnodeId=84ba012c18d64c6b128e0d4052f2e444ca9cf7068f4938adc4fdaadb367449fade42a7546247faa45069bdef7428d4c46e2ee7d71840e15e7d478aeaa21395c4
       - bootnodeIp=172.18.14.10
     volumes:
       - "./data/node2:/root/.ethereum"
+    network_mode: "host"
+
+  node:
+    depends_on:
+      - bootnode
+    image: ethereum/client-go:alltools-stable
+    command: geth --syncmode 'full' --port 30313 --rpc --rpcaddr '0.0.0.0' --rpcport 8501 --rpccorsdomain '*' --rpcapi 'personal,db,eth,net,web3,txpool,miner' --bootnodes "enode://84ba012c18d64c6b128e0d4052f2e444ca9cf7068f4938adc4fdaadb367449fade42a7546247faa45069bdef7428d4c46e2ee7d71840e15e7d478aeaa21395c4@172.18.14.10:30310" --networkid 888 --gasprice '1'
+    volumes:
+      - "./data/node3:/root/.ethereum"
     network_mode: "host"
