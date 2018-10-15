@@ -12,14 +12,12 @@
  *   },
  */
 
-require('dotenv').config();
-require('babel-register');
-require('babel-polyfill');
-const HDWalletProvider = require('truffle-hdwallet-provider');
+require('dotenv').config()
+const HDWalletProvider = require('truffle-hdwallet-provider')
 
 // NOTE: Only required if not using localhost
-const mnemonic = process.env.ETH_MNEMONIC || '';
-const apiKey = process.env.INFURA_API_KEY || '';
+const mnemonic = process.env.ETH_MNEMONIC || ''
+const apiKey = process.env.INFURA_API_KEY || ''
 
 module.exports = {
   // See <http://truffleframework.com/docs/advanced/configuration>
