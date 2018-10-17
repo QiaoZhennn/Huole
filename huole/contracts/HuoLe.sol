@@ -53,7 +53,7 @@ contract HuoLe is Ownable{
     charCost_ = _charCost;
   }
 
-  function getPost(uint _id) public view returns(string) {
-    return posts_[_id].text;
+  function getPost(uint _id) public view returns(string, uint) {
+    return (posts_[_id].text, posts_[_id].user.id);
   }
 }

@@ -8,17 +8,28 @@ import 'semantic-ui-css/semantic.min.css';
 
 // import drizzle functions and contract artifact
 import { Drizzle, generateStore } from "drizzle";
+import { DrizzleContext } from "drizzle-react";
+
 import HuoLe from "./contracts/HuoLe.json";
 
-// let drizzle know what contracts we want
-const options = { contracts: [HuoLe] };
+const drizzleOptions = {
+  contracts: [
+    HuoLe
+  ]
+}
 
-// setup the drizzle store and drizzle
-const drizzleStore = generateStore(options);
-const drizzle = new Drizzle(options, drizzleStore);
+const drizzleStore = generateStore(drizzleOptions);
+const drizzle = new Drizzle(drizzleOptions, drizzleStore);
 
 // pass in the drizzle instance
-ReactDOM.render(<App drizzle={drizzle} />, document.getElementById("root"));
+ReactDOM.render(
+  (
+    <DrizzleContext.Provider drizzle={drizzle}>
+      <App />
+    </DrizzleContext.Provider>
+  ),
+  document.getElementById("root")
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
