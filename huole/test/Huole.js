@@ -43,7 +43,9 @@ contract('HuoLe', (accounts) => {
   it('should be able to return specific posts', async () => {
     let post1 = await huole.getPost(1);
     let post2 = await huole.getPost(2);
-    assert.equal(post1, 'hello world');
-    assert.equal(post2, 'hello world again');
+    assert.equal(post1[0], 'hello world');
+    assert.equal(post1[1], 1);
+    assert.equal(post2[0], 'hello world again');
+    assert.equal(post2[1], 1);
   });
 });
