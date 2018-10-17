@@ -26,7 +26,7 @@ contract('HuoLe', (accounts) => {
   });
 
   it('creating 1 additional post from the same user shoouldn\'t increment user count', async () => {
-    await huole.newPost('hello world', 'tester', 'huole@huobi.com');
+    await huole.newPost('hello world again', 'tester', 'huole@huobi.com');
     let postCount = await huole.postCount_();
     let userCount = await huole.userCount_();
     assert.equal(postCount, 2);  
@@ -38,5 +38,12 @@ contract('HuoLe', (accounts) => {
     await huole.setCharCost(1000);
     let charCost = await huole.charCost_();
     assert.equal(charCost, 1000);
+  });
+
+  it('should be able to return specific posts', async () => {
+    let post1 = await huole.getPost(1);
+    let post2 = await huole.getPost(2);
+    assert.equal(post1, 'hello world');
+    assert.equal(post2, 'hello world again');
   });
 });
