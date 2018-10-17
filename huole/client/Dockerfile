@@ -5,12 +5,9 @@ RUN \
 
 add . /home/huole-client
 RUN mkdir -p /var/www/huole
-RUN cp -R /home/huole-client/build/* /var/www/huole/
 RUN cp /home/huole-client/huole.huobidev.com /etc/nginx/sites-available/
 RUN ln -s /etc/nginx/sites-available/huole.huobidev.com /etc/nginx/sites-enabled/
 RUN cp /home/huole-client/nginx.conf /etc/nginx/
 
-WORKDIR /etc/nginx
-CMD ["nginx"]
-
+ENTRYPOINT ["/usr/sbin/nginx", "-g", "daemon off;"]
 EXPOSE 80
