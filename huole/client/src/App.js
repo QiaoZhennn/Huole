@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import './App.css';
 
+import {
+  Button,
+  Grid,
+  Header,
+  Message,
+} from 'semantic-ui-react'
+
 function Indicator(props) {
   if (props.loading) return "Loading Drizzle...";
   return <div className="App">Drizzle is ready</div>;
@@ -32,12 +39,27 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <p>
-            Welcome to HuoLe. It's working.
-          </p>
-          <Indicator loading={this.state.loading}/>
-        </header>
+        <Grid container style={{ padding: '5em 0em' }}>
+
+          <Grid.Row>
+            <Grid.Column>
+              <Header as='h1' dividing>
+                Welcome to HuoLe.
+              </Header>
+            </Grid.Column>
+          </Grid.Row>
+
+          <Grid.Row>
+            <Grid.Column>
+              <Message>
+                <Header as='h1'>It's working!</Header>
+                <Indicator loading={this.state.loading}/>
+                <Button color='blue'>Does nothing &raquo;</Button>
+              </Message>
+            </Grid.Column>
+          </Grid.Row>
+
+        </Grid>
       </div>
     );
   }
