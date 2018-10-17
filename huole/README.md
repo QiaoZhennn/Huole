@@ -6,3 +6,11 @@
  - 合约全局变量：smallCamel_
  - 函数传入参数：_smallCamel
  - 函数内变量, Struct 内变量： smallCamel
+
+## How to bring up the App
+1. cd HuoLe project folder
+2. truffle migrate
+3. npm install
+4. cd client
+5. npm install
+6. npm run start
