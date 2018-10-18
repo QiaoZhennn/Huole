@@ -20,7 +20,16 @@ export default class Posts extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-  
+  componentDidMount() {
+    const { drizzleState } = this.props;
+
+    const addr = drizzleState.accounts[0];
+    if (addr) {
+      this.setState({addr: addr});
+    } else {
+      this.setState({addr: 'Is your metamask unlocked?'});
+    }
+  }
   closeModal = () => this.setState({ modalOpen: false })
 
   handleChange(event) {

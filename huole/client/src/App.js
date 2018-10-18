@@ -40,27 +40,34 @@ class App extends Component {
 
           <Grid.Row>
             <Grid.Column>
-                <DrizzleContext.Consumer>
-                  {drizzleContext => {
-                    const { drizzle, drizzleState, initialized } = drizzleContext;
-                    if (!initialized) {
-                      return "Loading...";
-                    } else {
-                      return (
-                        <div>
-                          <div> drizzle loadied.</div>
-                          <Posts drizzle={drizzle} drizzleState={drizzleState} />
-                        </div>
-                      );
-                    }
-                  }}
-                </DrizzleContext.Consumer>           
+              <DrizzleContext.Consumer>
+                {drizzleContext => {
+                  const { drizzle, drizzleState, initialized } = drizzleContext;
+                  if (!initialized) {
+                    return "Loading...";
+                  } else {
+                    return (
+                      <div>
+                        <div> drizzle loadied.</div>
+                        <Posts drizzle={drizzle} drizzleState={drizzleState} />
+                      </div>
+                    );
+                  }
+                }}
+              </DrizzleContext.Consumer>           
             </Grid.Column>
           </Grid.Row>
 
           <Grid.Row centered>
             <Grid.Column width={10}>
-                <Faucet />
+              <DrizzleContext.Consumer>
+              {drizzleContext => {
+                const { drizzle, drizzleState, initialized } = drizzleContext;
+                if (initialized) {
+                  return (<Faucet drizzle={drizzle} drizzleState={drizzleState}/>);
+                }
+              }}
+              </DrizzleContext.Consumer>
             </Grid.Column>
           </Grid.Row>
 
