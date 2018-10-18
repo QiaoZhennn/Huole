@@ -3,6 +3,7 @@ import './App.css';
 
 import { DrizzleContext } from "drizzle-react";
 import Posts from './Posts';
+import Faucet from './Faucet';
 
 import {
   Button,
@@ -54,6 +55,12 @@ class App extends Component {
                     }
                   }}
                 </DrizzleContext.Consumer>           
+            </Grid.Column>
+          </Grid.Row>
+
+          <Grid.Row centered>
+            <Grid.Column width={10}>
+                <Faucet />
             </Grid.Column>
           </Grid.Row>
 
