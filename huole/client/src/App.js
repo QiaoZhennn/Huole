@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-
+// comment by Zhen for arc diff test
 import { DrizzleContext } from "drizzle-react";
 import Posts from './Posts';
 import Faucet from './Faucet';
