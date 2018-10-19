@@ -1,6 +1,5 @@
 import React from "react";
 import {Form, Input, Message, Button, Segment} from 'semantic-ui-react';
-import PostList from "./components/PostList";
 
 export default class Posts extends React.Component {
   constructor(props) {
@@ -50,6 +49,7 @@ export default class Posts extends React.Component {
     const contract = drizzle.contracts.HuoLe;
     try {
       const stackId = contract.methods.newPost.cacheSend(this.state.postMsg, this.state.nickname, this.state.contact);
+      console.log(stackId)
     } catch (err) {
       this.setState({errorMessage: err.message});
     }

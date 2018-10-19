@@ -9,7 +9,7 @@ import 'semantic-ui-css/semantic.min.css';
 // import drizzle functions and contract artifact
 import { Drizzle, generateStore } from "drizzle";
 import { DrizzleContext } from "drizzle-react";
-import {BrowserRouter, Route, Link, Switch} from 'react-router-dom';
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
 
 import HuoLe from "./contracts/HuoLe.json";
 
