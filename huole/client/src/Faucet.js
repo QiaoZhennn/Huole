@@ -39,7 +39,7 @@ export default class Posts extends React.Component {
     this.setState({modalOpen: true});
     
     let url = `http://localhost:8000/showmethemoney`;
-    if (process.env.NODE_ENV == 'production') {
+    if (process.env.NODE_ENV === 'production') {
       url = `http://huole.huobidev.com:8000/showmethemoney`;
     }
 
