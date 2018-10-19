@@ -33,11 +33,13 @@ contract('HuoLe', (accounts) => {
     assert.equal(userCount, 1);
   });
 
-  it('only owner can call setCharCost', async () => {
-    await expectThrow(huole.setCharCost.call(1000, {from: accounts[1]}));
-    await huole.setCharCost(1000);
+  it('only owner can call setCharCost', async () => {   
+    // accounts[0] that deployed the contract is the contract owner by default
+    await huole.setCharCost(1000, {from: accounts[0]});
     let charCost = await huole.charCost_();
-    assert.equal(charCost, 1000);
+    assert.equal(charCost.toNumber(), 1000);
+
+    await expectThrow(huole.setCharCost(1000, {from: accounts[1]}));
   });
 
   it('should be able to return specific posts', async () => {
