@@ -9,8 +9,13 @@ import 'semantic-ui-css/semantic.min.css';
 // import drizzle functions and contract artifact
 import { Drizzle, generateStore } from "drizzle";
 import { DrizzleContext } from "drizzle-react";
+import {BrowserRouter, Route, Link, Switch} from 'react-router-dom';
 
 import HuoLe from "./contracts/HuoLe.json";
+
+import Layout from './components/Layout';
+import NewPost from "./components/NewPost";
+import Faucet from './components/Faucet';
 
 const drizzleOptions = {
   contracts: [
@@ -25,7 +30,16 @@ const drizzle = new Drizzle(drizzleOptions, drizzleStore);
 ReactDOM.render(
   (
     <DrizzleContext.Provider drizzle={drizzle}>
-      <App />
+
+      <BrowserRouter>
+      <Layout>
+        <Switch>
+          <Route path='/' exact component={App}/>
+          <Route path='/newpost' exact component={NewPost}/>
+          <Route path='/faucet' exact component={Faucet}/>
+        </Switch>
+      </Layout>
+      </BrowserRouter>
     </DrizzleContext.Provider>
   ),
   document.getElementById("root")

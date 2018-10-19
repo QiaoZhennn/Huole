@@ -7,7 +7,6 @@ var app = express();
 
 var port = process.env.PORT || 8000;
 
-
 // Add headers
 app.use(function (req, res, next) {
 
@@ -47,6 +46,9 @@ var Web3 = require('web3');
 // var web3 = new Web3(new Web3.providers.HttpProvider('http://172.18.14.10:8501'));
 var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 web3.eth.defaultAccount = process.env.WALLET_ADDRESS;
+const addr = process.env.WALLET_ADDRESS;
+console.log("private", process.env.WALLET_PRIVATE_KEY);
+console.log("addr",addr)
 web3.eth.getBalance(web3.eth.defaultAccount).then((res) => {
   let myBalanceWei = res
   console.log('my blance wei: ', myBalanceWei);

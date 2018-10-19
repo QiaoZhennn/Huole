@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
 import './App.css';
-// comment by Zhen for arc diff test
 import { DrizzleContext } from "drizzle-react";
 import Posts from './Posts';
-import Faucet from './Faucet';
 
 import {
-  Button,
   Grid,
-  Header,
-  Message,
+  Header
 } from 'semantic-ui-react'
 
+import PostList from './components/PostList';
+import Faucet from './Faucet';
 
 class App extends Component {
   state = { loading: true, drizzleState: null };
@@ -31,46 +29,24 @@ class App extends Component {
 
           <Grid.Row>
             <Grid.Column>
-              <Message>
-                <Header as='h1'>It's working!</Header>          
-                <Button color='blue'>Does nothing &raquo;</Button>
-              </Message>
+                <DrizzleContext.Consumer>
+                  {drizzleContext => {
+                    const { drizzle, drizzleState, initialized } = drizzleContext;
+                    if (!initialized) {
+                      return "Loading...";
+                    } else {
+                      return (
+                        <div>
+                          <PostList drizzle={drizzle} drizzleState={drizzleState}/>
+                          <Posts drizzle={drizzle} drizzleState={drizzleState} />
+                          <Faucet drizzle={drizzle} drizzleState={drizzleState} />
+                        </div>
+                      );
+                    }
+                  }}
+                </DrizzleContext.Consumer>           
             </Grid.Column>
           </Grid.Row>
-
-          <Grid.Row>
-            <Grid.Column>
-              <DrizzleContext.Consumer>
-                {drizzleContext => {
-                  const { drizzle, drizzleState, initialized } = drizzleContext;
-                  if (!initialized) {
-                    return "Loading...";
-                  } else {
-                    return (
-                      <div>
-                        <div> drizzle loadied.</div>
-                        <Posts drizzle={drizzle} drizzleState={drizzleState} />
-                      </div>
-                    );
-                  }
-                }}
-              </DrizzleContext.Consumer>           
-            </Grid.Column>
-          </Grid.Row>
-
-          <Grid.Row centered>
-            <Grid.Column width={10}>
-              <DrizzleContext.Consumer>
-              {drizzleContext => {
-                const { drizzle, drizzleState, initialized } = drizzleContext;
-                if (initialized) {
-                  return (<Faucet drizzle={drizzle} drizzleState={drizzleState}/>);
-                }
-              }}
-              </DrizzleContext.Consumer>
-            </Grid.Column>
-          </Grid.Row>
-
         </Grid>
       </div>
     );

@@ -50,4 +50,22 @@ contract('HuoLe', (accounts) => {
     assert.equal(post2[0], 'hello world again');
     assert.equal(post2[1], 1);
   });
+
+  it('should get user info', async () => {
+    let post1 = await huole.getPost(1);
+    let user_id = post1[1];
+    let user = await huole.getUser(user_id);
+    assert.equal(user[1], 'tester');
+  });
+
+  it('time stamp test', async () => {
+    let post = await huole.getPost(1);
+    let time = post[2];
+    let d = new Date(0);
+    let n = d.getTimezoneOffset();
+    d.setUTCSeconds(time);
+    d += n;
+    console.log(d);
+    assert.equal(post[0], 'hello world');
+  });
 });

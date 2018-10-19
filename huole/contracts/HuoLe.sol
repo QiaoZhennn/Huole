@@ -10,6 +10,7 @@ contract HuoLe is Ownable{
   uint public userCount_;
   uint public postCount_;
   mapping(address=>User) users_;
+  mapping(uint=>User) user_by_id_;
   mapping(uint=>Post) posts_;
   uint public charCost_;
 
@@ -23,6 +24,7 @@ contract HuoLe is Ownable{
 
   struct Post {
     uint id;
+    uint postTime;
     string text;
     User user;
   }
@@ -44,8 +46,8 @@ contract HuoLe is Ownable{
 
     postCount_ = postCount_.add(1);
     User memory user = users_[msg.sender];
-    posts_[postCount_] = Post(postCount_, _msg, user);
-
+    posts_[postCount_] = Post(postCount_, now, _msg, user);
+    user_by_id_[user.id] = user;
     emit PostCreated(_msg, msg.sender, _nickname, _contact);
   }
 
@@ -53,7 +55,11 @@ contract HuoLe is Ownable{
     charCost_ = _charCost;
   }
 
-  function getPost(uint _id) public view returns(string, uint) {
-    return (posts_[_id].text, posts_[_id].user.id);
+  function getPost(uint _id) public view returns(string, uint, uint) {
+    return (posts_[_id].text, posts_[_id].user.id, posts_[_id].postTime);
+  }
+
+  function getUser(uint _id) public view returns(address, string, string) {
+    return (user_by_id_[_id].addr, user_by_id_[_id].nickname, user_by_id_[_id].contact);
   }
 }
