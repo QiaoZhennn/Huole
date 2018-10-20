@@ -31,7 +31,7 @@ import morganBody from 'morgan-body';
 morganBody(app);
 
 app.get('/', function(req, res) {
-  res.status(200).send({success: 'true', message: 'hooray! welcome to our api!'});   
+  res.status(200).send({success: 'true', message: 'hooray! welcome to our api!'});
 });
 
 var Web3 = require('web3');
@@ -65,16 +65,16 @@ app.post('/showmethemoney', (req, res) => {
   const to_addr = req.body.addr;
   let txhash;
   web3.eth.getTransactionCount(web3.eth.defaultAccount).then((nonce) => {
-    
+
     let details = {
       "to": to_addr,
-      "value": web3.utils.toHex(web3.utils.toWei('0.01', 'ether')),
+      "value": web3.utils.toHex(web3.utils.toWei('0.1', 'ether')),
       "gas": 21000,
       "gasPrice": 1000,
       "nonce": nonce,
       "chainId": 888
     }
-  
+
     const transaction = new EthereumTx(details)
     transaction.sign( Buffer.from(process.env.WALLET_PRIVATE_KEY, 'hex') )
     const serializedTransaction = transaction.serialize()

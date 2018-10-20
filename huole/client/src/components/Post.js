@@ -20,9 +20,9 @@ class Post extends Component {
           <Item.Meta>
             <Label className='cinema'>Post Time: {this.getTime(this.props.post[1])}</Label>
             <Label className='cinema'>NickName: {this.props.post[3]}</Label>
-            <Label className='cinema'>Post Time: {this.props.post[4]}</Label>
+            <Label className='cinema'>Contact: {this.props.post[4]}</Label>
           </Item.Meta>
-          <Item.Content verticalAlign='middle'>Contact: {this.props.post[0]}</Item.Content>
+          <Item.Content verticalAlign='middle'>Content: {this.props.post[0]}</Item.Content>
         </Item.Content>
       </Item>
     );

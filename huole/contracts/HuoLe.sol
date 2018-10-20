@@ -38,7 +38,6 @@ contract HuoLe is Ownable{
   }
 
   function newPost(string _msg, string _nickname, string _contact) public {
-
     if (users_[msg.sender].id == 0) {
       userCount_ = userCount_.add(1);
       users_[msg.sender] = User(userCount_, msg.sender, _nickname, _contact);
