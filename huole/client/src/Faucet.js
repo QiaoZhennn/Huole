@@ -37,8 +37,12 @@ export default class Posts extends React.Component {
 
   handleSubmit() {
     this.setState({modalOpen: true});
-    console.log('money money home: ', this.state.addr);
-    const url = `http://localhost:8000/showmethemoney`;
+    
+    let url = `http://localhost:8000/showmethemoney`;
+    if (process.env.NODE_ENV === 'production') {
+      url = `http://huole.huobidev.com:8000/showmethemoney`;
+    }
+
     const requestBody = {
       addr: this.state.addr,
     }; 
