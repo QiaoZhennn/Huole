@@ -76,7 +76,7 @@ export default class Posts extends React.Component {
                   <label>Wallet Address</label>
                   <input placeholder='0x...' value={this.state.addr} onChange={this.handleChange} />
                 </Form.Field>
-                <Button type='submit' onClick={this.handleSubmit}>Get 0.01 ETH</Button>
+                <Button type='submit' onClick={this.handleSubmit}>Get 0.1 ETH</Button>
               </Form>
             </Card.Content>
           </Card>
