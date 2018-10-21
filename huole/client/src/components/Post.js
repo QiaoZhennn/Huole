@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Label, Item} from 'semantic-ui-react';
+import {Image, Card, Icon} from 'semantic-ui-react';
 
 
 class Post extends Component {
@@ -9,22 +9,34 @@ class Post extends Component {
     let n = d.getTimezoneOffset();
     d.setUTCSeconds(epochTime);
     d += n;
-    return d;
+    let words = d.split(" ");
+    return words[0] + " " + words[1] + " " + words[2] + " " + words[3] + " " + words[4];
   }
 
   render() {
     return (
-      <Item>
-        <Item.Content>
-          <Item.Header as='a'>User: {this.props.post[2]}</Item.Header>
-          <Item.Meta>
-            <Label className='cinema'>Post Time: {this.getTime(this.props.post[1])}</Label>
-            <Label className='cinema'>NickName: {this.props.post[3]}</Label>
-            <Label className='cinema'>Contact: {this.props.post[4]}</Label>
-          </Item.Meta>
-          <Item.Content verticalAlign='middle'>Content: {this.props.post[0]}</Item.Content>
-        </Item.Content>
-      </Item>
+      <Card color='yellow'>
+        <Card.Content>
+          <Image floated='right' size='mini' src={require('../img0.png')} />
+          <Card.Header>
+            <Icon name='user outline'/>
+            {this.props.post[3]}
+          </Card.Header>
+          <Card.Meta>
+            <Icon name='address card'/>
+            {this.props.post[2].substr(0, 7) + "..."}
+            &nbsp;&nbsp;
+            <Icon name='envelope'/>
+            {this.props.post[4]}
+          </Card.Meta>
+          <Card.Description>
+            <strong>{this.props.post[0]}</strong>
+          </Card.Description>
+        </Card.Content>
+        <Card.Content extra>
+          {this.getTime(this.props.post[1])}
+        </Card.Content>
+      </Card>
     );
   }
 }
