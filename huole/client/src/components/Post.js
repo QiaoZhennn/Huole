@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Image, Card, Icon} from 'semantic-ui-react';
+import Identicon from 'identicon.js';
 
 
 class Post extends Component {
@@ -13,11 +14,17 @@ class Post extends Component {
     return words[0] + " " + words[1] + " " + words[2] + " " + words[3] + " " + words[4];
   }
 
+  generateIcon = () => {
+    var data = new Identicon(this.props.post[2], 420).toString();
+    return 'data:image/png;base64,' + data;
+  };
+
   render() {
     return (
       <Card color='yellow'>
         <Card.Content>
-          <Image floated='right' size='mini' src={require('../img0.png')} />
+          <Image floated='right' size='mini'
+                 src={this.generateIcon()}/>
           <Card.Header>
             <Icon name='user outline'/>
             {this.props.post[3]}

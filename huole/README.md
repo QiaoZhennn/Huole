@@ -23,3 +23,4 @@
 
 ## 注意事项
 1. 修改smart contract源文件后，要删除build目录，然后再truffle compile。否则MetaMask会报RPC相关错误。
+2. 如果遇到了RPC error，先查看MetaMask是否与contract在同一网络，然后reset MetaMask account
