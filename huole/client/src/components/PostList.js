@@ -1,5 +1,5 @@
 import React from "react";
-import { Item } from 'semantic-ui-react';
+import { Item, Card } from 'semantic-ui-react';
 
 import Post from './Post';
 
@@ -24,7 +24,6 @@ export default class Posts extends React.Component {
         const post = await contract.methods.getPost(i + 1).call();
         const user = await contract.methods.getUser(post[1]).call();
         const obj = [post[0], post[2], user[0], user[1], user[2]];
-        console.log(obj);
         posts.push(obj);
       }
       this.setState({posts: posts});
@@ -41,9 +40,9 @@ export default class Posts extends React.Component {
 
   render() {
     return (
-      <Item.Group divided>
+      <Card.Group centered>
         {this.renderPosts()}
-      </Item.Group>
+      </Card.Group>
     );
   }
 }

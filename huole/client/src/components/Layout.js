@@ -4,7 +4,7 @@ import Header from './Header'
 
 export default props => {
   return (
-    <Container>
+    <Container style={{margin:20}}>
       <Header/>
       {props.children}
     </Container>

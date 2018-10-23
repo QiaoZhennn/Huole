@@ -1,54 +1,53 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import './App.css';
-import { DrizzleContext } from "drizzle-react";
-import Posts from './Posts';
+import {BrowserRouter, Route} from 'react-router-dom';
 
-import {
-  Grid,
-  Header
-} from 'semantic-ui-react'
+
+import Layout from './components/Layout';
+import NewPost from "./components/NewPost";
+
 
 import PostList from './components/PostList';
-import Faucet from './Faucet';
+import Faucet from './components/Faucet';
 
 class App extends Component {
-  state = { loading: true, drizzleState: null };
+  state = {loading: true, drizzleState: null};
+
+  componentDidMount() {
+    const {drizzle} = this.props;
+    this.unsubscribe = drizzle.store.subscribe(() => {
+      const drizzleState = drizzle.store.getState();
+      if (drizzleState.drizzleStatus.initialized) {
+        this.setState({loading: false, drizzleState});
+      }
+    })
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
 
   render() {
+    if (this.state.loading) return "Loading Drizzle..."
     return (
-      <div className="App">
-        <Grid container style={{ padding: '5em 0em' }}>
-
-          <Grid.Row>
-            <Grid.Column>
-              <Header as='h1' dividing>
-                Welcome to HuoLe.
-              </Header>
-            </Grid.Column>
-          </Grid.Row>
-
-          <Grid.Row>
-            <Grid.Column>
-                <DrizzleContext.Consumer>
-                  {drizzleContext => {
-                    const { drizzle, drizzleState, initialized } = drizzleContext;
-                    if (!initialized) {
-                      return "Loading...";
-                    } else {
-                      return (
-                        <div>
-                          <PostList drizzle={drizzle} drizzleState={drizzleState}/>
-                          <Posts drizzle={drizzle} drizzleState={drizzleState} />
-                          <Faucet drizzle={drizzle} drizzleState={drizzleState} />
-                        </div>
-                      );
-                    }
-                  }}
-                </DrizzleContext.Consumer>           
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </div>
+      <BrowserRouter>
+      <Layout>
+        <div className="App">
+          <Route
+            path='/' exact
+            render={() => <PostList drizzle={this.props.drizzle} drizzleState={this.state.drizzleState}/>}
+          />
+          <Route
+            path='/newpost'
+            render={() => <NewPost drizzle={this.props.drizzle} drizzleState={this.state.drizzleState}/>}
+          />
+          <Route
+            path='/faucet'
+            render={() => <Faucet drizzle={this.props.drizzle} drizzleState={this.state.drizzleState}/>}
+          />
+        </div>
+      </Layout>
+      </BrowserRouter>
     );
   }
 }

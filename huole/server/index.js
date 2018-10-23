@@ -36,7 +36,7 @@ app.get('/', function(req, res) {
 
 var Web3 = require('web3');
 var web3;
-if (process.env.NODE_ENV == 'prod') {
+if (process.env.NODE_ENV === 'prod') {
   web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8501'));
 } else {
   web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
@@ -45,11 +45,12 @@ if (process.env.NODE_ENV == 'prod') {
 web3.eth.defaultAccount = process.env.WALLET_ADDRESS;
 const addr = process.env.WALLET_ADDRESS;
 console.log("private", process.env.WALLET_PRIVATE_KEY);
-console.log("addr",addr)
+console.log("addr",addr);
+let myBalance = 0;
 web3.eth.getBalance(web3.eth.defaultAccount).then((res) => {
   let myBalanceWei = res
   console.log('my blance wei: ', myBalanceWei);
-  let myBalance = web3.utils.fromWei(myBalanceWei, 'ether');
+  myBalance = web3.utils.fromWei(myBalanceWei, 'ether');
   console.log('my balance: ', myBalance);
 });
 var EthereumTx = require('ethereumjs-tx')
@@ -73,7 +74,7 @@ app.post('/showmethemoney', (req, res) => {
       "gasPrice": 1000,
       "nonce": nonce,
       "chainId": 888
-    }
+    };
 
     const transaction = new EthereumTx(details)
     transaction.sign( Buffer.from(process.env.WALLET_PRIVATE_KEY, 'hex') )
@@ -89,6 +90,10 @@ app.post('/showmethemoney', (req, res) => {
     });
   });
 
+});
+
+app.post('/faucetinfo', (req, res) => {
+  return res.status(200).send({faucetAddr: addr, faucetBalance: myBalance});
 });
 
 app.listen(port, function() {
