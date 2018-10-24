@@ -31,6 +31,7 @@ export default class Posts extends React.Component {
   }
 
   renderPosts() {
+    this.state.posts.reverse();
     return this.state.posts.map((post, index) => {
       return (
         <Post key={index} post={post}/>
