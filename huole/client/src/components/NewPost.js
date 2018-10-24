@@ -30,7 +30,7 @@ class NewPost extends React.Component {
   }
 
   getTxStatus = () => {
-    const { transactions, transactionStack } = this.props.drizzleState;
+    const {transactions, transactionStack} = this.props.drizzleState;
     const txHash = transactionStack[this.state.stackId];
     if (!txHash) return null;
     return `${transactions[txHash].status}`;
@@ -61,7 +61,7 @@ class NewPost extends React.Component {
 
   render() {
     return (
-      <div  style={{marginTop:'10px', marginBottom:'20px'}}>
+      <div style={{marginTop: '10px', marginBottom: '20px'}}>
         <Segment>
           <h2>Publish a new post</h2>
           <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
@@ -87,10 +87,11 @@ class NewPost extends React.Component {
               />
             </Form.Field>
             <Message error header="Oops!" content={this.state.errorMessage}/>
-            <Button primary loading={this.state.loading}>Post</Button>
+            <Button primary>Post</Button>
+            {/*<Button primary loading={this.state.loading}>Post</Button>*/}
           </Form>
         </Segment>
-        <div>{this.tryToRedirect()}</div>
+        {/*<div>{this.tryToRedirect()}</div>*/}
       </div>
     );
   }

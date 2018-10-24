@@ -5,8 +5,8 @@ import {Link} from 'react-router-dom';
 export default () => {
   return (
     <div style={{marginTop: '10px', marginBottom: '10px'}}>
-      <Header size='large' color='orange' textAlign='center'>Welcome To HuoLe</Header>
-      <Menu color='brown' inverted style={{marginTop: '10px'}}>
+      <Header size='large' textAlign='center'>Welcome To HuoLe</Header>
+      <Menu style={{marginTop: '10px'}}>
         <Menu.Item>
           <Link to='/'>Home</Link>
         </Menu.Item>

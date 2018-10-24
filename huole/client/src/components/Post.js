@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image, Card, Icon} from 'semantic-ui-react';
+import {Item, Icon} from 'semantic-ui-react';
 import Identicon from 'identicon.js';
 
 
@@ -21,29 +21,29 @@ class Post extends Component {
 
   render() {
     return (
-      <Card color='yellow'>
-        <Card.Content>
-          <Image floated='right' size='mini'
-                 src={this.generateIcon()}/>
-          <Card.Header>
+      <Item>
+        <Item.Image floated='right' size='small'
+                    src={this.generateIcon()}/>
+        <Item.Content>
+          <Item.Header>
             <Icon name='user outline'/>
             {this.props.post[3]}
-          </Card.Header>
-          <Card.Meta>
+          </Item.Header>
+          <Item.Meta>
             <Icon name='address card'/>
             {this.props.post[2].substr(0, 7) + "..."}
             &nbsp;&nbsp;
             <Icon name='envelope'/>
             {this.props.post[4]}
-          </Card.Meta>
-          <Card.Description>
+          </Item.Meta>
+          <Item.Description>
             <strong>{this.props.post[0]}</strong>
-          </Card.Description>
-        </Card.Content>
-        <Card.Content extra>
-          {this.getTime(this.props.post[1])}
-        </Card.Content>
-      </Card>
+          </Item.Description>
+          <Item.Extra>
+            {this.getTime(this.props.post[1])}
+          </Item.Extra>
+        </Item.Content>
+      </Item>
     );
   }
 }

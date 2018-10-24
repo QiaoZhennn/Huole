@@ -1,5 +1,5 @@
 import React from "react";
-import { Card } from 'semantic-ui-react';
+import {Item} from 'semantic-ui-react';
 
 import Post from './Post';
 
@@ -14,13 +14,13 @@ export default class Posts extends React.Component {
   };
 
   componentDidMount() {
-    const { drizzle } = this.props;
+    const {drizzle} = this.props;
     const contract = drizzle.contracts.HuoLe;
 
     (async () => {
       const postCount = await contract.methods.postCount_().call();
       let posts = [];
-      for(let i = 0; i < postCount; i++) {
+      for (let i = 0; i < postCount; i++) {
         const post = await contract.methods.getPost(i + 1).call();
         const user = await contract.methods.getUser(post[1]).call();
         const obj = [post[0], post[2], user[0], user[1], user[2]];
@@ -33,16 +33,16 @@ export default class Posts extends React.Component {
   renderPosts() {
     return this.state.posts.map((post, index) => {
       return (
-          <Post key={index} post={post}/>
+        <Post key={index} post={post}/>
       )
     });
   }
 
   render() {
     return (
-      <Card.Group centered>
+      <Item.Group divided>
         {this.renderPosts()}
-      </Card.Group>
+      </Item.Group>
     );
   }
 }
