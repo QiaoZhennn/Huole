@@ -1,5 +1,5 @@
 import React from "react";
-import {Form, Input, Message, Button, Segment} from 'semantic-ui-react';
+import {Form, Input, Message, Button, Segment, Label} from 'semantic-ui-react';
 import {Redirect} from 'react-router-dom';
 
 class NewPost extends React.Component {
@@ -7,6 +7,7 @@ class NewPost extends React.Component {
     postMsg: '',
     nickname: '',
     contact: '',
+    tip: 0,
     loading: false,
     errorMessage: '',
     msgCount: 0,
@@ -19,14 +20,11 @@ class NewPost extends React.Component {
     const {drizzle} = this.props;
     const contract = drizzle.contracts.HuoLe;
 
-    (async () => {
-      const postCount = await contract.methods.postCount_().call();
-      let posts = [];
-      for (let i = 0; i < postCount; i++) {
-        posts.push(await contract.methods.getPost(i + 1).call());
-      }
-      this.setState({posts: posts});
-    })();
+    const web3 = drizzle.web3;
+    console.log('address', contract.address);
+    web3.eth.getBalance(contract.address).then((value) => {
+      console.log('contract balance', value);
+    });
   }
 
   getTxStatus = () => {
@@ -43,13 +41,22 @@ class NewPost extends React.Component {
     const {drizzle, drizzleState} = this.props;
     const contract = drizzle.contracts.HuoLe;
     try {
-      const stackId = contract.methods.newPost.cacheSend(this.state.postMsg, this.state.nickname, this.state.contact, {
-        from: drizzleState.accounts[0]
+      // this.transferToFaucet();
+      const stackId = contract.methods.newPost.cacheSend(this.state.postMsg, this.state.nickname, this.state.contact, drizzle.web3.utils.toWei(this.state.tip, 'ether'), {
+        from: drizzleState.accounts[0],
+        to: contract.address,
+        value: drizzle.web3.utils.toWei(this.calculatePayment(), 'ether')
       });
       this.setState({stackId});
+
     } catch (err) {
       this.setState({errorMessage: err.message});
     }
+    this.setState({loading: false});
+  };
+
+  calculatePayment = () => {
+    return (parseFloat(this.state.tip) + (this.state.postMsg.length*0.0001)).toString(); // one char = 0.0001 ether
   };
 
   tryToRedirect = () => {
@@ -71,6 +78,8 @@ class NewPost extends React.Component {
                 value={this.state.postMsg}
                 onChange={event => this.setState({postMsg: event.target.value})}
               />
+              <Label>char count: {this.state.postMsg.length}</Label>
+              <Label>ether cost: {this.state.postMsg.length * 0.0001}</Label>
             </Form.Field>
             <Form.Field>
               <Input
@@ -86,12 +95,19 @@ class NewPost extends React.Component {
                 onChange={event => this.setState({contact: event.target.value})}
               />
             </Form.Field>
+            <Form.Field>
+              <Input
+                placeholder={'Pay higher extra fee to post on a better location, default 0'}
+                value={this.state.tip}
+                onChange={event => this.setState({tip: event.target.value})}
+              />
+            </Form.Field>
             <Message error header="Oops!" content={this.state.errorMessage}/>
-            <Button primary>Post</Button>
-            {/*<Button primary loading={this.state.loading}>Post</Button>*/}
+            {/*<Button primary>Post</Button>*/}
+            <Button primary loading={this.state.loading}>Post</Button>
           </Form>
         </Segment>
-        {/*<div>{this.tryToRedirect()}</div>*/}
+        <div>{this.tryToRedirect()}</div>
       </div>
     );
   }

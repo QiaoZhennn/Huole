@@ -4,7 +4,6 @@ import Identicon from 'identicon.js';
 
 
 class Post extends Component {
-
   getTime(epochTime) {
     let d = new Date(0);
     let n = d.getTimezoneOffset();
@@ -15,7 +14,7 @@ class Post extends Component {
   }
 
   generateIcon = () => {
-    var data = new Identicon(this.props.post[2], 420).toString();
+    var data = new Identicon(this.props.post.userAddress, 420).toString();
     return 'data:image/png;base64,' + data;
   };
 
@@ -27,20 +26,20 @@ class Post extends Component {
         <Item.Content>
           <Item.Header>
             <Icon name='user outline'/>
-            {this.props.post[3]}
+            {this.props.post.nickname}
           </Item.Header>
           <Item.Meta>
             <Icon name='address card'/>
-            {this.props.post[2].substr(0, 7) + "..."}
+            {this.props.post.userAddress.substr(0, 7) + "..."}
             &nbsp;&nbsp;
             <Icon name='envelope'/>
-            {this.props.post[4]}
+            {this.props.post.contact}
           </Item.Meta>
           <Item.Description>
-            <strong>{this.props.post[0]}</strong>
+            <strong>{this.props.post.content}</strong>
           </Item.Description>
           <Item.Extra>
-            {this.getTime(this.props.post[1])}
+            post time: {this.getTime(this.props.post.postTime)} &nbsp; &nbsp; tip: {this.props.post.tip/10**18} ether
           </Item.Extra>
         </Item.Content>
       </Item>

@@ -3,7 +3,7 @@ import expectThrow from './helpers/expectThrow';
 let HuoLe = artifacts.require('./HuoLe.sol');
 
 contract('HuoLe', (accounts) => {
-  let huole
+  let huole;
 
   before('get deployed instance', async () => {
     huole = await HuoLe.deployed()
@@ -18,7 +18,7 @@ contract('HuoLe', (accounts) => {
 
   it('should be able to create a post', async () => {
     // const tester1 = accounts[1];
-    await huole.newPost('hello world', 'tester', 'huole@huobi.com');
+    await huole.newPost('hello world', 'tester', 'huole@huobi.com', 0);
     let userCount = await huole.userCount_();
     let postCount = await huole.postCount_();
     assert.equal(userCount, 1);
@@ -26,7 +26,7 @@ contract('HuoLe', (accounts) => {
   });
 
   it('creating 1 additional post from the same user shoouldn\'t increment user count', async () => {
-    await huole.newPost('hello world again', 'tester', 'huole@huobi.com');
+    await huole.newPost('hello world again', 'tester', 'huole@huobi.com', 1);
     let postCount = await huole.postCount_();
     let userCount = await huole.userCount_();
     assert.equal(postCount, 2);  
@@ -67,5 +67,11 @@ contract('HuoLe', (accounts) => {
     d += n;
     console.log(d);
     assert.equal(post[0], 'hello world');
+  });
+
+  it('tip test', async () => {
+    await huole.newPost('hh', 'tester', 'huole@huobi.com', 1000000000000000);
+    let post3 = await huole.getPost(3);
+    assert.equal(post3[3], 1000000000000000);
   });
 });
