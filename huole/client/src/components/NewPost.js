@@ -37,7 +37,6 @@ class NewPost extends React.Component {
   onSubmit = async (event) => {
     event.preventDefault();
     this.setState({loading: true, errorMessage: ''});
-
     const {drizzle, drizzleState} = this.props;
     const contract = drizzle.contracts.HuoLe;
     try {
@@ -48,12 +47,12 @@ class NewPost extends React.Component {
         value: drizzle.web3.utils.toWei(this.calculatePayment(), 'ether')
       });
       this.setState({stackId});
-
     } catch (err) {
       this.setState({errorMessage: err.message});
     }
     this.setState({loading: false});
   };
+
 
   calculatePayment = () => {
     return (parseFloat(this.state.tip) + (this.state.postMsg.length*0.0001)).toString(); // one char = 0.0001 ether
@@ -103,8 +102,8 @@ class NewPost extends React.Component {
               />
             </Form.Field>
             <Message error header="Oops!" content={this.state.errorMessage}/>
-            {/*<Button primary>Post</Button>*/}
-            <Button primary loading={this.state.loading}>Post</Button>
+            <Button primary>Post</Button>
+            {/*<Button primary loading={this.state.loading}>Post</Button>*/}
           </Form>
         </Segment>
         <div>{this.tryToRedirect()}</div>
