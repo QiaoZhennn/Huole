@@ -1,7 +1,7 @@
 FROM ubuntu:16.04
 RUN \
   apt-get update && \
-  apt-get install -y nginx 
+  apt-get install -y nginx less vim
 
 add . /home/huole-client
 RUN mkdir -p /var/www/huole

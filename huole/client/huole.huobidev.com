@@ -8,6 +8,6 @@ server {
         server_name huole.huobidev.com www.huole.huobidev.com;
 
         location / {
-                try_files $uri $uri/ =404;
+                try_files $uri /index.html;
         }
 }
