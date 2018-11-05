@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Item, Icon} from 'semantic-ui-react';
+import {Feed, Icon} from 'semantic-ui-react';
 import Identicon from 'identicon.js';
 
 
@@ -20,29 +20,37 @@ class Post extends Component {
 
   render() {
     return (
-      <Item>
-        <Item.Image floated='right' size='small'
-                    src={this.generateIcon()}/>
-        <Item.Content>
-          <Item.Header>
-            <Icon name='user outline'/>
-            {this.props.post.nickname}
-          </Item.Header>
-          <Item.Meta>
+      <Feed.Event>
+        <Feed.Label>
+          <img src={this.generateIcon()}/>
+        </Feed.Label>
+        <Feed.Content>
+          <Feed.Summary>
+            <Feed.User>
+              {this.props.post.nickname}
+            </Feed.User>
             <Icon name='address card'/>
             {this.props.post.userAddress.substr(0, 7) + "..."}
-            &nbsp;&nbsp;
             <Icon name='envelope'/>
             {this.props.post.contact}
-          </Item.Meta>
-          <Item.Description>
-            <strong>{this.props.post.content}</strong>
-          </Item.Description>
-          <Item.Extra>
-            post time: {this.getTime(this.props.post.postTime)} &nbsp; &nbsp; tip: {this.props.post.tip/10**18} ether
-          </Item.Extra>
-        </Item.Content>
-      </Item>
+            <Feed.Date>{this.getTime(this.props.post.postTime)}</Feed.Date>
+          </Feed.Summary>
+          <Feed.Extra text>
+            {this.props.post.content}
+          </Feed.Extra>
+          <Feed.Extra text>
+            <Icon name='dollar sign'/>{this.props.post.tip/10**18} ether
+          </Feed.Extra>
+          <Feed.Meta>
+            <Feed.Like onClick={()=>{
+
+            }}>
+              <Icon name='like' />
+              5 Likes
+            </Feed.Like>
+          </Feed.Meta>
+        </Feed.Content>
+      </Feed.Event>
     );
   }
 }

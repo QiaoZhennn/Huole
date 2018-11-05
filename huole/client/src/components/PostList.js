@@ -1,5 +1,6 @@
 import React from "react";
-import {Item} from 'semantic-ui-react';
+import {Feed} from 'semantic-ui-react';
+import axios from 'axios';
 
 import Post from './Post';
 
@@ -22,6 +23,21 @@ export default class Posts extends React.Component {
       const postCount = await contract.methods.postCount_().call();
       let posts = [];
       for (let i = 0; i < postCount; i++) {
+
+        let url = `http://localhost:8000/readPost`;
+        if (process.env.NODE_ENV === 'production') {
+          url = `http://huole.huobidev.com:8000/readPost`;
+        }
+        // axios.post(url, {postId: i+1})
+        //   .then(res => {
+        //     if(res.status === 200) {
+        //       console.log(res.data);
+        //     }
+        //   }).catch((err) => {
+        //   console.log(err);
+        // });
+
+
         const post = await contract.methods.getPost(i + 1).call();
         const user = await contract.methods.getUser(post[1]).call(); //post[1] is user_id
         const obj = {
@@ -61,9 +77,9 @@ export default class Posts extends React.Component {
 
   render() {
     return (
-      <Item.Group divided>
+      <Feed>
         {this.renderPosts()}
-      </Item.Group>
+      </Feed>
     );
   }
 }
