@@ -1,5 +1,5 @@
 import React from "react";
-import {Form, Input, Message, Button, Segment, Label} from 'semantic-ui-react';
+import {Form, Input, Message, Button, Segment, Label, TextArea} from 'semantic-ui-react';
 import {Redirect} from 'react-router-dom';
 import axios from 'axios';
 
@@ -14,7 +14,8 @@ class NewPost extends React.Component {
     msgCount: 0,
     posts: [],
     stackId: null,
-    redirect: false
+    redirect: false,
+    contract: null
   };
 
   componentDidMount() {
@@ -40,27 +41,23 @@ class NewPost extends React.Component {
     this.setState({loading: true, errorMessage: ''});
     const {drizzle, drizzleState} = this.props;
     const contract = drizzle.contracts.HuoLe;
+    this.setState({loading: true});
+
     try {
       const stackId = await contract.methods.newPost.cacheSend(this.state.postMsg, this.state.nickname, this.state.contact, drizzle.web3.utils.toWei(this.state.tip, 'ether'), {
         from: drizzleState.accounts[0],
         to: contract.address,
         value: drizzle.web3.utils.toWei(this.calculatePayment(), 'ether')
       });
-
-      // let promise = await new Promise((resolve, reject) => {
-      //   setTimeout(() => resolve("done!"), 3000)
-      // });
       this.setState({stackId});
+      this.setState({contract});
     } catch (err) {
       this.setState({errorMessage: err.message});
     }
-    this.storeToDB(contract);
-    this.setState({loading: false});
   };
 
   storeToDB = async (contract) => {
     const postId = await contract.methods.postCount_().call();
-    alert(postId);
     const post = await contract.methods.getPost(postId).call();
     const user = await contract.methods.getUser(post[1]).call();
     const requestBody = {
@@ -72,7 +69,7 @@ class NewPost extends React.Component {
       nickname: user[1],
       contact: user[2],
       likeCount: 0,
-      comment: {}
+      comment: [{}]
     };
 
     var qs = require('qs');
@@ -83,7 +80,7 @@ class NewPost extends React.Component {
     axios.post(url, qs.stringify(requestBody)).then(resp => {
       console.log('server res: ', resp.data);
     }).catch((err) => {
-      console.error('something went wrong in faucet handleSubmit');
+      console.error('something went wrong in creating new post');
     });
   };
 
@@ -92,10 +89,12 @@ class NewPost extends React.Component {
     return cost; // one char = 0.0001 ether
   };
 
-  tryToRedirect = () => {
+  tryToRedirect () {
     let status = this.getTxStatus();
     if (status === 'success') {
-      return <Redirect to='/'/>;
+      this.setState({loading: false});
+      this.storeToDB(this.state.contract);
+      return(<Redirect to={'/'}/>)
     }
   };
 
@@ -106,13 +105,14 @@ class NewPost extends React.Component {
           <h2>Publish a new post</h2>
           <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
             <Form.Field>
-              <Input
-                placeholder={'Content'}
+              <Label>char count: {this.state.postMsg.length}</Label>
+              <Label>ether cost: {parseFloat(this.state.postMsg.length * 0.0001).toFixed(18)}</Label>
+              <TextArea
+                autoHeight
+                placeholder='Write your content here'
                 value={this.state.postMsg}
                 onChange={event => this.setState({postMsg: event.target.value})}
               />
-              <Label>char count: {this.state.postMsg.length}</Label>
-              <Label>ether cost: {parseFloat(this.state.postMsg.length * 0.0001).toFixed(18)}</Label>
             </Form.Field>
             <Form.Field>
               <Input
@@ -136,11 +136,13 @@ class NewPost extends React.Component {
               />
             </Form.Field>
             <Message error header="Oops!" content={this.state.errorMessage}/>
-            <Button primary>Post</Button>
             {/*<Button primary loading={this.state.loading}>Post</Button>*/}
+            <Button primary>Post</Button>
           </Form>
         </Segment>
-        <div>{this.tryToRedirect()}</div>
+        <div>
+        {this.tryToRedirect()}
+        </div>
       </div>
     );
   }

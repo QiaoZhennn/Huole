@@ -4,8 +4,7 @@ require('dotenv').config();
 
 var express = require('express');
 const mongoose = require("mongoose");
-require('./models/User');
-mongoose.connect(process.env.mongoURI);
+mongoose.connect(process.env.mongoURI_Local);
 
 
 var app = express();
@@ -36,7 +35,6 @@ require('./faucet')(app);
 
 
 require('./models/Post');
-require('./models/User');
 require('./post')(app);
 
 app.listen(port, function() {

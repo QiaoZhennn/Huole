@@ -10,7 +10,7 @@ const postSchema = new Schema({
   nickname: String,
   contact: String,
   likeCount: Number,
-  comment: Object
+  comment: [Object]
 });
 
 mongoose.model('posts', postSchema);
