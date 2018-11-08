@@ -13,6 +13,9 @@ export default () => {
         <Menu.Item>
           <Link to='/faucet'>Faucet</Link>
         </Menu.Item>
+        <Menu.Item>
+          <Link to='/lottery'>Lottery</Link>
+        </Menu.Item>
         <Menu.Item position="right">
           <Link to='/newpost'>New Post</Link>
         </Menu.Item>

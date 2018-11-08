@@ -21,11 +21,11 @@ module.exports = (app) => {
   let myBalance = 0;
   web3.eth.getBalance(web3.eth.defaultAccount).then((res) => {
     let myBalanceWei = res
-    console.log('my blance wei: ', myBalanceWei);
+    console.log('my balance wei: ', myBalanceWei);
     myBalance = web3.utils.fromWei(myBalanceWei, 'ether');
     console.log('my balance: ', myBalance);
   });
-  var EthereumTx = require('ethereumjs-tx')
+  var EthereumTx = require('ethereumjs-tx');
 
   app.post('/showmethemoney', (req, res) => {
     if(!req.body.addr) {

@@ -9,6 +9,7 @@ import NewPost from "./components/NewPost";
 
 import PostList from './components/PostList';
 import Faucet from './components/Faucet';
+import Lottery from './components/Lottery';
 
 class App extends Component {
   state = {loading: true, drizzleState: null};
@@ -44,6 +45,10 @@ class App extends Component {
           <Route
             path='/faucet'
             render={() => <Faucet drizzle={this.props.drizzle} drizzleState={this.state.drizzleState}/>}
+          />
+          <Route
+            path='/lottery'
+            render={() => <Lottery drizzle={this.props.drizzle} drizzleState={this.state.drizzleState}/>}
           />
         </div>
       </Layout>
