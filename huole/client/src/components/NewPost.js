@@ -92,7 +92,7 @@ class NewPost extends React.Component {
   tryToRedirect () {
     let status = this.getTxStatus();
     if (status === 'success') {
-      this.setState({loading: false});
+      // this.setState({loading: false});
       this.storeToDB(this.state.contract);
       return(<Redirect to={'/'}/>)
     }
