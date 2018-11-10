@@ -1,7 +1,5 @@
 import React from "react";
-import {Form, Input, Message, Button, Segment, Label, TextArea} from 'semantic-ui-react';
-import {Redirect} from 'react-router-dom';
-import axios from 'axios';
+import {Form, Input, Button, Segment} from 'semantic-ui-react';
 
 class Lottery extends React.Component {
   state = {

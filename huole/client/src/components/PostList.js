@@ -15,7 +15,7 @@ export default class Posts extends React.Component {
   componentDidMount() {
     const {drizzle, drizzleState} = this.props;
     const contract = drizzle.contracts.HuoLe;
-    this.state.currentUserAddress =  drizzleState.accounts[0];
+    this.setState({'currentUserAddress' :  drizzleState.accounts[0]});
     (async () => {
       const postCount = await contract.methods.postCount_().call();
       let posts = [];
