@@ -71,7 +71,7 @@ class NewPost extends React.Component {
       likeCount: 0,
       comment: [{}]
     };
-
+    console.log(requestBody);
     var qs = require('qs');
     let url = `http://localhost:8000/createPost`;
     if (process.env.NODE_ENV === 'production') {
@@ -91,6 +91,7 @@ class NewPost extends React.Component {
 
   tryToRedirect () {
     let status = this.getTxStatus();
+    console.log(status);
     if (status === 'success') {
       // this.setState({loading: false});
       this.storeToDB(this.state.contract);

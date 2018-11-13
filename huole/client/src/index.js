@@ -9,10 +9,12 @@ import 'semantic-ui-css/semantic.min.css';
 import {Drizzle, generateStore} from "drizzle";
 
 import HuoLe from "./contracts/HuoLe.json";
+import Lottery from "./contracts/Lottery.json";
 
 const drizzleOptions = {
   contracts: [
-    HuoLe
+    HuoLe,
+    Lottery
   ]
 };
 

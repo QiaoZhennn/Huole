@@ -25,7 +25,7 @@ export default class Posts extends React.Component {
         if (process.env.NODE_ENV === 'production') {
           url = `http://huole.huobidev.com:8000/readPost`;
         }
-        await axios.post(url, {postId: i+1})
+        axios.post(url, {postId: i+1})
           .then(res => {
             if(res.status === 200) {
               if (res.data.postId) {

@@ -88,7 +88,7 @@ class Post extends Component {
     return (
       <Feed.Event>
         <Feed.Label>
-          <img src={this.generateIcon()}/>
+          <img src={this.generateIcon()} alt={"user icon"}/>
         </Feed.Label>
         <Feed.Content>
           <Feed.Summary>
