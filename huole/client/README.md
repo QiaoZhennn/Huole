@@ -2,18 +2,22 @@ The front-end part was bootstrapped with [Create React App](https://github.com/f
 
 Deploy process:
 ```
-# here is how to deploy. Build the project in this directory and you're done.
+# here is how to deploy. Build the project in the corresponding directories and you're done.
+# e.g. in /home/huole/staging/sunnynet/huole/client
 npm run build
 ```
 
 Here is how the deployment process works:
 The docker image is built from Dockerfile, make sure rebuild the image if you've changed the Dockerfile.
 ```
-# alant/huole is the name of the image
-build -t alant/huole .
+docker build -t huole/prod -f Dockerfile.prod .
+docker build -t huole/staging -f Dockerfile.staging .
 ```
 
 After buildling the image, mount the build dir to the www dir:
 ```
-docker run -d -it --name huole-nginx -p 80:80 -v $PWD/build/:/var/www/huole alant/huole
+# in /home/huole/staging/sunnynet/huole/client
+docker run -d -it --name huole-prod-nginx -p 80:80 -v $PWD/build/:/var/www/huole huole/prod
+# in /home/huole/prod/sunnynet/huole/client
+docker run -d -it --name huole-prod-nginx -p 8080:8080 -v $PWD/build/:/var/www/huole-staging/ huole/staging
 ```
