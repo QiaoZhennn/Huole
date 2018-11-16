@@ -36,7 +36,7 @@ contract('Lottery', (accounts) => {
 
   it('set time', async() => {
     let cur = parseInt((new Date().getTime() / 1000));
-    let dur = 5;
+    let dur = 2;
     await lottery.setTime(cur, dur);
     const startTime = await lottery.startTime_();
     const duration = await lottery.duration_();
@@ -56,10 +56,10 @@ contract('Lottery', (accounts) => {
     const duration = await lottery.duration_();
     const dur = duration.toNumber() * 1000;
     await timeout(dur);
-    const winner = await lottery.pickWinner();
-    const winnerIdx = winner[0];
-    const winnerAddr = winner[1];
     const players = await lottery.getPlayers();
-    assert.equal(winnerAddr, players[winnerIdx]);
+    console.log('players: ',players);
+    await lottery.pickWinner();
+    const winner = await lottery.winner_();
+    assert.ok(winner);
   });
 });

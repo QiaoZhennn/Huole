@@ -14,18 +14,23 @@ class Lottery extends React.Component {
     errorMessage: '',
     setupReady: false,
     winnerAddress: '',
-    winnerReady: false
+    winnerReady: false,
+    lotteryRunning: false
   };
 
   componentDidMount = async () => {
     const {drizzle, drizzleState} = this.props;
     const contract = drizzle.contracts.Lottery;
-    const bankerAddress = await contract.methods.owner().call();
-    console.log(bankerAddress);
-    this.setState({bankerAddress});
+    // const bankerAddress = await contract.methods.owner().call();
+    // console.log(bankerAddress);
+    // this.setState({bankerAddress});
     const duration = await contract.methods.duration_().call();
     console.log(duration);
     this.setState({duration});
+    await this.updateBonus(drizzle, contract);
+  };
+
+  updateBonus = async (drizzle, contract) => {
     const web3 = drizzle.web3;
     web3.eth.getBalance(contract.address).then((value) => {
       console.log('contract balance', value);
@@ -36,18 +41,22 @@ class Lottery extends React.Component {
     this.setState({numPlayer: players.length});
   };
 
-  onSubmit = async (event) => {
-    event.preventDefault();
-    const {drizzle, drizzleState} = this.props;
-    const contract = drizzle.contracts.Lottery;
-    try {
-      const stackId = await contract.methods.enter.cacheSend({
-        from: drizzleState.accounts[0],
-        to: contract.address,
-        value: drizzle.web3.utils.toWei(this.state.contribute, 'ether')
-      });
-    } catch (err) {
-      this.setState({errorMessage: err.message});
+  onContribute = async (event) => {
+    if (!this.state.lotteryRunning) {
+      alert("Lottery haven't start yet");
+    } else {
+      const {drizzle, drizzleState} = this.props;
+      const contract = drizzle.contracts.Lottery;
+      try {
+        await contract.methods.enter().send({
+          from: drizzleState.accounts[0],
+          to: contract.address,
+          value: drizzle.web3.utils.toWei(this.state.contribute, 'ether')
+        });
+        await this.updateBonus(drizzle, contract);
+      } catch (err) {
+        this.setState({errorMessage: err.message});
+      }
     }
   };
 
@@ -63,20 +72,27 @@ class Lottery extends React.Component {
   runALottery = async () => {
     if (this.state.winnerReady) {
       window.location.replace('/lottery');
+    } else if (this.state.lotteryRunning) {
+      alert("Lottery is running");
     } else {
       const {drizzle, drizzleState} = this.props;
       const contract = drizzle.contracts.Lottery;
       const current = parseInt((new Date().getTime() / 1000));
-      console.log(current);
       const endTime = parseInt(current + parseInt(this.state.duration));
-      console.log(endTime);
+      console.log('current time: ', current);
+      console.log('duration: ', this.state.duration);
       try {
-        const stackId = await contract.methods.setTime.cacheSend(current, this.state.duration, {
+        // const stackId = await contract.methods.setTime.cacheSend(current, this.state.duration, {
+        //   from: drizzleState.accounts[0],
+        //   to: contract.address
+        // });
+        await contract.methods.setTime(current, this.state.duration).send({
           from: drizzleState.accounts[0],
           to: contract.address
         });
         this.setState({startTime: this.getTime(current)});
         this.setState({endTime: this.getTime(endTime), setupReady: true})
+        this.setState({lotteryRunning: true});
       } catch (err) {
         this.setState({errorMessage: err.message});
       }
@@ -87,13 +103,12 @@ class Lottery extends React.Component {
     const {drizzle, drizzleState} = this.props;
     const contract = drizzle.contracts.Lottery;
     try {
-      // TODO
-      // drizzle cacheSend() return type
-      const stackId = await contract.methods.pickWinner.cacheSend({
+      await contract.methods.pickWinner().send({
         from: drizzleState.accounts[0],
         to: contract.address
       });
-      console.log(stackId);
+      const winner = await contract.methods.winner_().call();
+      this.setState({winnerAddress: winner});
       this.setState({winnerReady:true});
     } catch (err) {
       this.setState({errorMessage: err.message});
@@ -107,7 +122,7 @@ class Lottery extends React.Component {
           seconds={this.state.duration}
           color="#000"
           alpha={0.9}
-          size={200}
+          size={150}
           onComplete={() => this.pickWinner()}
         />)
     } else {
@@ -118,13 +133,14 @@ class Lottery extends React.Component {
   render() {
     return (
       <div style={{marginTop: '10px', marginBottom: '20px'}}>
+        <Message hidden={!this.state.winnerReady} color='purple'>Winner is: {this.state.winnerAddress}, wins: {this.state.totalLottery} ether</Message>
         <Segment>
           <h2>Lottery</h2>
           <h4>Total lottery: {this.state.totalLottery} ether</h4>
           <h4>Number of players: {this.state.numPlayer}</h4>
           <hr/>
           <h3>Want to try?</h3>
-          <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
+          <Form onSubmit={this.onContribute} error={!!this.state.errorMessage}>
             <Form.Field>
               <Input
                 placeholder={'input amount'}
@@ -138,7 +154,7 @@ class Lottery extends React.Component {
         </Segment>
         <Segment>
           <h2>Banker</h2>
-          <h4>Banker address: {this.state.bankerAddress}</h4>
+          {/*<h4>Banker address: {this.state.bankerAddress}</h4>*/}
           <Form onSubmit={this.runALottery}>
             <Form.Field>
               <Input
@@ -153,7 +169,6 @@ class Lottery extends React.Component {
             {this.countdown()}
           </Form>
         </Segment>
-        <Message info hidden={!this.state.winnerReady}>Winner is: {this.state.winnerAddress}</Message>
       </div>
     )
   }

@@ -16,29 +16,31 @@ export default class Posts extends React.Component {
     const {drizzle, drizzleState} = this.props;
     const contract = drizzle.contracts.HuoLe;
     this.setState({'currentUserAddress' :  drizzleState.accounts[0]});
-    (async () => {
-      const postCount = await contract.methods.postCount_().call();
-      let posts = [];
-      for (let i = 0; i < postCount; i++) {
-
-        let url = `http://localhost:8000/readPost`;
-        if (process.env.NODE_ENV === 'production') {
-          url = `http://huole.huobidev.com:8000/readPost`;
-        }
-        axios.post(url, {postId: i+1})
-          .then(res => {
-            if(res.status === 200) {
-              if (res.data.postId) {
-                posts.push(res.data);
-              }
-            }
-          }).catch((err) => {
-          console.log(err);
-        });
-      }
-      this.setState({posts: posts});
-    })();
+    this.readDataFromDB(contract);
   }
+
+  readDataFromDB = async (contract) => {
+    const postCount = await contract.methods.postCount_().call();
+    let posts = [];
+    for (let i = 0; i < postCount; i++) {
+
+      let url = `http://localhost:8000/readPost`;
+      if (process.env.NODE_ENV === 'production') {
+        url = `http://huole.huobidev.com:8000/readPost`;
+      }
+      await axios.post(url, {postId: i+1})
+        .then(res => {
+          if(res.status === 200) {
+            if (res.data.postId) {
+              posts.push(res.data);
+            }
+          }
+        }).catch((err) => {
+        console.log(err);
+      });
+    }
+    this.setState({posts: posts});
+  };
 
   sortByExtraFeeAndPostTime = (post1, post2) => {
     const fee1 = post1.tip / 10**18; // in ether

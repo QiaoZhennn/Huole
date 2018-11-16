@@ -42,15 +42,21 @@ class NewPost extends React.Component {
     const {drizzle, drizzleState} = this.props;
     const contract = drizzle.contracts.HuoLe;
     this.setState({loading: true});
-
+    this.setState({contract});
     try {
-      const stackId = await contract.methods.newPost.cacheSend(this.state.postMsg, this.state.nickname, this.state.contact, drizzle.web3.utils.toWei(this.state.tip, 'ether'), {
+      // const stackId = await contract.methods.newPost.cacheSend(this.state.postMsg, this.state.nickname, this.state.contact, drizzle.web3.utils.toWei(this.state.tip, 'ether'), {
+      //   from: drizzleState.accounts[0],
+      //   to: contract.address,
+      //   value: drizzle.web3.utils.toWei(this.calculatePayment(), 'ether')
+      // });
+      await contract.methods.newPost(this.state.postMsg, this.state.nickname, this.state.contact, drizzle.web3.utils.toWei(this.state.tip, 'ether')).send({
         from: drizzleState.accounts[0],
         to: contract.address,
         value: drizzle.web3.utils.toWei(this.calculatePayment(), 'ether')
       });
-      this.setState({stackId});
-      this.setState({contract});
+      // this.setState({stackId});
+      await this.storeToDB(contract);
+      window.location.replace('/');
     } catch (err) {
       this.setState({errorMessage: err.message});
     }
@@ -89,15 +95,15 @@ class NewPost extends React.Component {
     return cost; // one char = 0.0001 ether
   };
 
-  tryToRedirect () {
-    let status = this.getTxStatus();
-    console.log(status);
-    if (status === 'success') {
-      // this.setState({loading: false});
-      this.storeToDB(this.state.contract);
-      return(<Redirect to={'/'}/>)
-    }
-  };
+  // tryToRedirect () {
+  //   let status = this.getTxStatus();
+  //   console.log(status);
+  //   if (status === 'success') {
+  //     // this.setState({loading: false});
+  //     this.storeToDB(this.state.contract);
+  //     return(<Redirect to={'/'}/>)
+  //   }
+  // };
 
   render() {
     return (
@@ -138,11 +144,11 @@ class NewPost extends React.Component {
             </Form.Field>
             <Message error header="Oops!" content={this.state.errorMessage}/>
             {/*<Button primary loading={this.state.loading}>Post</Button>*/}
-            <Button primary>Post</Button>
+            <Button primary loading={this.state.loading}>Post</Button>
           </Form>
         </Segment>
         <div>
-        {this.tryToRedirect()}
+        {/*{this.tryToRedirect()}*/}
         </div>
       </div>
     );
